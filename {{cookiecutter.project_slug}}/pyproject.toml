@@ -30,15 +30,18 @@ classifiers=[
     'Programming Language :: Python :: 3.9',
 ]
 packages = [
-    { include = "{{ cookiecutter.pkg_name }}" },
-    { include = "tests", format = "sdist" },
+    { include = "{{ cookiecutter.pkg_name }}", from = "src" }
+]
+include = [
+    { path = "tests", format = "sdist" }
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<4.0"
+python = ">=3.7,<4.0"
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
 click = "8.0.1"
 {%- endif %}
+logzero = "^1.7.0"
 
 black  = { version = "^21.5b2", optional = true}
 isort  = { version = "^5.8.0", optional = true}
@@ -49,6 +52,7 @@ mypy = {version = "^0.900", optional = true}
 {%- endif %}
 pytest  = { version = "^6.2.4", optional = true}
 pytest-cov  = { version = "^2.12.0", optional = true}
+pytest-html = { version = "^3.1.1", optional = true}
 tox  = { version = "^3.20.1", optional = true}
 virtualenv  = { version = "^20.2.2", optional = true}
 pip  = { version = "^20.3.1", optional = true}
@@ -62,6 +66,9 @@ mkdocs-autorefs = {version = "^0.2.1", optional = true}
 pre-commit = {version = "^2.12.0", optional = true}
 toml = {version = "^0.10.2", optional = true}
 bump2version = {version = "^1.0.1", optional = true}
+pydoc-markdown = {version = "^4.5.1", optional = true}
+radon = {version = "^5.1.0", optional = true}
+jinja2 = {version = "^3.0.3", optional = true}
 
 [tool.poetry.extras]
 test = [
@@ -73,10 +80,21 @@ test = [
     {%- endif %}
     "flake8",
     "flake8-docstrings",
-    "pytest-cov"
+    "pytest-cov",
+    "pytest-html",
+    "radon",
+    "jinja2"
     ]
 
-dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
+dev = [
+    "tox",
+    "pre-commit",
+    "virtualenv",
+    "pip",
+    "twine",
+    "toml",
+    "bump2version"
+    ]
 
 doc = [
     "mkdocs",
@@ -84,18 +102,34 @@ doc = [
     "mkdocs-material",
     "mkdocstrings",
     "mkdocs-material-extension",
-    "mkdocs-autorefs"
+    "mkdocs-autorefs",
+    "pydoc-markdown"
     ]
 
-{% if cookiecutter.command_line_interface|lower == 'click' -%}
 [tool.poetry.scripts]
-{{ cookiecutter.project_slug }} = '{{ cookiecutter.pkg_name }}.cli:main'
 
+{% if cookiecutter.command_line_interface|lower == 'click' -%}
+{{ cookiecutter.project_slug }} = '{{ cookiecutter.pkg_name }}.click_cli:main'
 {% endif -%}
+
+{% if cookiecutter.command_line_interface|lower == 'saf' -%}
+{{ cookiecutter.project_slug }} = '{{ cookiecutter.pkg_name }}.main:main'
+{% endif -%}
+
+commands = "script:scripts"
+tests = "script:tests"
+format = "script:reformat"
+lint = "script:lint"
+apidoc = "script:sphinx_api_document"
+testdoc = "script:sphinx_test_document"
+metrics = "script:metrics"
+update_api_docs = "script:update_api_docs"
+local_doc_server = "script:local_doc_server"
+
 [tool.black]
 line-length = 120
 skip-string-normalization = true
-target-version = ['py36', 'py37', 'py38']
+target-version = ['py37', 'py38', 'py39', 'py310']
 include = '\.pyi?$'
 exclude = '''
 /(
