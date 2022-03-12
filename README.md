@@ -19,10 +19,12 @@ This tool will create Python project with the following features:
 * [Tox](https://tox.readthedocs.io): Test your code against environment matrix, lint and artifact check
 * Format with [Black](https://github.com/psf/black) and [Isort](https://github.com/PyCQA/isort)
 * Lint code with [Flake8](https://flake8.pycqa.org) and [Flake8-docstrings](https://pypi.org/project/flake8-docstrings/)
+* Metrics with [Radon](https://radon.readthedocs.io/)
 * Check static type with [Mypy](http://mypy-lang.org/) (optional)
 * [Pre-commit hooks](https://pre-commit.com/): Formatting/linting anytime when commit your code
 * [Mkdocstrings](https://mkdocstrings.github.io/): Auto API doc generation
 * Command line interface using [Click](https://click.palletsprojects.com/en/8.0.x/) (optional)
+* Command line interface using Settings Application Framework (SAF)
 * [bump2version](https://github.com/c4urself/bump2version): Pre-configured version bumping with a single command
 * Continuous Integration/Deployment by [GitHub actions](https://github.com/features/actions), includes:
     - publish dev build/official release to TestPyPI/PyPI automatically when CI success
@@ -41,7 +43,7 @@ pip install -U cookiecutter
 Generate a Python package project:
 
 ```
-cookiecutter https://github.com/waynerv/cookiecutter-pypackage.git
+cookiecutter https://github.com/royw/cookiecutter-pypackage.git
 ```
 
 Then follow **[Tutorial](docs/tutorial.md)** to finish other configurations.
